@@ -35,7 +35,7 @@ class Game {
         
         
         self.players.forEach{ player in
-            print("Enter a name for the team")
+            print("ENTER A NAME FOR THE TEAM")
             if let teamName = readLine() {
                 player.team = Team(name: teamName)
                 print("A team name \(teamName) is created ")
@@ -49,7 +49,7 @@ class Game {
             //while team1.teamCharacters.count < 4 {
             
             func getName()-> String{
-                print("Set name for the character type")
+                print("SET NAME FOR CHARACTER TYPE")
                 
                 var nameChar:String?
                 while nameChar?.count ?? 0 < 3 {
@@ -89,16 +89,16 @@ class Game {
                 currentTeam = curTeam as Team
                 
                 while currentTeam.teamCharacters.count < 3 {
-                    var count = 3 - currentTeam.teamCharacters.count
+                    let count = 3 - currentTeam.teamCharacters.count
                     print("""
-                    Choose \(count) characters for player \(player.playerName)
+                    CHOOSE \(count) CHARACTERS FOR PLAYER \(player.playerName)
                     1. warrior
                     2. magnus
                     3. colossus
                     4. dwarf
                     """)
                     
-                    print("Choose a type in the list")
+                    print("CHOOSE TYPE IN THE LIST")
                     
                     if let choice = readLine() {
                         
@@ -152,7 +152,7 @@ class Game {
         currentTeam.teamCharacters.enumerated().forEach{(index, Character) in
             print("\(index). \(Character.name)")
         }
-        print("Choose a type in the list")
+        print("CHOOSE TYPE IN THE LIST")
         while (charFound){
             if let choice = readLine() {
                 if let choiceInt = Int(choice),
@@ -161,7 +161,7 @@ class Game {
                     charFound = false
                 } else {
                     print("value non correct")
-                   
+                    
                 }
             }
         }
@@ -183,7 +183,7 @@ class Game {
         currentTeam.teamCharacters.enumerated().forEach{(index, Character) in
             print("\(index). \(Character.name)")
         }
-        print("Choose a type in the list")
+        print("CHOOSE TYPE IN THE LIST")
         while (charFound){
             if let choice = readLine() {
                 if let choiceInt = Int(choice),
@@ -192,7 +192,7 @@ class Game {
                     charFound = false
                 } else {
                     print("value non correct")
-                   
+                    
                 }
             }
         }
@@ -208,75 +208,94 @@ class Game {
         print("round")
     }
     
-    func listAction(){
+    func listAction(charPlayer: Character, heal: Int){
         
+        if heal == 10 {
+            print("name : \(charPlayer.name) type : \(charPlayer.type) can Heal")
+            print("""
+            Choose to heal or attack
+            1. heal
+            2. attack
+            """)
+            print("CHOOSE AN ACTION IN THE LIST")
+            if let charAction = readLine(){
+                if let charActionInt = Int(charAction),
+                   charActionInt > 0 || charActionInt < 3 {
+                    print(charActionInt)
+                    if(charActionInt == 1 ) {
+                        charPlayer.isHeal = true
+                    }
+                    else if(charActionInt == 2){
+                        charPlayer.isAttack = true
+                    } else {
+                        print("Action Don't exist")
+                    }
+                }
+            }
+        } else {
+            print("name : \(charPlayer.name) type : \(charPlayer.type) can't Heal, SO attack!")
+            charPlayer.isAttack = true
+        }
+        print("charPlayer isAttack \(charPlayer.isAttack)")
+        print("charPlayer isHeal \(charPlayer.isHeal)")
+
     }
     
     func startFigth(){
         print(labelInfos["fight"]!)
-        var currentCharPlay: Character?
+        var myCharPlay: Character?
+        var enemiCharPlay:Character?
+        
         
         //while currentCharPlay != nil {
-            // Game running
-            
-            print("is game ----------")
-
-            // choose a character
-            print("Choose 1 character for the game")
-            let enemiTeamChar:Character?
-            
-            currentCharPlay = chooseCharacterMyTeam()
+        // Game running
         
-            guard let cP = currentCharPlay else {
-                return
-            }
-            print(cP.name)
-            print(cP.type)
-            guard let cC = cP.currentChar else {
-                return
-            }
-            print(cC)
-            print(cC.heal)
-            guard let cCHeal = cC.heal else {
-                return
-            }
-            print(cCHeal)
-            if cCHeal == 10 {
-                print("name : \(cP.name) type : \(cP.type) can Heal")
-                print("""
-                Choose to heal or attack
-                1. heal
-                2. attack
-                """)
-                print("Choose an action in the list")
-                
-            } else {
-                print("name : \(cP.name) type : \(cP.type) can't Heal, SO attack!")
-            }
-            
-            
-            /*players.forEach{ player in
-                var currentTeam: Team
-                guard  let curTeam: Team = player.team else {
-                    return
-                }
-                currentTeam = curTeam as Team
-                var lists = ""
-                currentTeam.teamCharacters.enumerated().forEach{(index, Character) in
-                    lists += "\(index) . \(Character.name) | "
-                }
-                print("\(lists) in his team ")
-                
-                if let choice = readLine() {
-                    if let choiceInt = Int(choice),
-                       choiceInt < currentTeam.teamCharacters.count {
-                           currentCharPlay = currentTeam.teamCharacters[choiceInt]
-                    }
-                }
-                
-               
-            }*/
-        //}
+        print("is game ----------")
+        
+        // choose my character
+        print("CHOOSE MY CHARACTER FOR THE GAME")
+        
+        myCharPlay = chooseCharacterMyTeam()
+        
+        guard let cP = myCharPlay else {
+            return
+        }
+        print(cP.name)
+        print(cP.type)
+        guard let cC = cP.currentChar else {
+            return
+        }
+        print(cC)
+        print(cC.heal)
+        guard let cCHeal = cC.heal else {
+            return
+        }
+        print( cCHeal)
+        
+        listAction(charPlayer: cP, heal: cCHeal)
+        
+        // choose enemy character
+        print("CHOOSE ENEMY CHARACTER FOR THE GAME")
+        
+        enemiCharPlay = enemyCharacterMyTeam()
+        
+        guard let cP1 = enemiCharPlay else {
+            return
+        }
+        print(cP1.name)
+        print(cP1.type)
+        guard let cC1 = cP1.currentChar else {
+            return
+        }
+        print(cC1)
+        print(cC1.heal)
+        guard let cCHeal1 = cC1.heal else {
+            return
+        }
+        print( cCHeal1)
+        
+        listAction(charPlayer: cP1, heal: cCHeal1)
+        
         
         print(labelInfos["over"])
     }
@@ -290,16 +309,7 @@ class Game {
         return players[index]
     }
 }
-//
-//func readName() -> String? {
-//    print("Entrez le nom du Personnage:")
-//    if let name = readLine() {
-//        print("Mon nom est \(name)")
-//    }
-//}
+
 var myGame = Game(start: true)
 myGame.startFigth()
-//myGame.isGame = false
-//myGame.displayInfo(message: "Game is Start")
-//print(myGame.getPlayer(index: 0).playerName)
-//print(myGame.getPlayer(index: 1).playerName)
+

@@ -21,6 +21,8 @@ class Character {
     var name:String
     var currentChar: TypeChar?
     var type: CharacterType
+    var isAttack = false
+    var isHeal = false
     
     init(type: CharacterType, name: String){
         self.name = name
