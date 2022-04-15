@@ -18,19 +18,23 @@ enum CharacterType{
 
 class Character {
 //    var type: CharacterType
-    var name=""
+    var name:String
     var currentChar: TypeChar?
+    var type: CharacterType
     
     init(type: CharacterType, name: String){
+        self.name = name
+        self.type = type
+        
         switch type {
         case .warrior:
-            currentChar = Warrior(name: name)
+            currentChar = Warrior()
         case .magnus:
-            currentChar = Magnus(name: name)
+            currentChar = Magnus()
         case .colossus:
-            currentChar = Colossus(name: name)
+            currentChar = Colossus()
         case .dwarf:
-            currentChar = Dawrf(name: name)
+            currentChar = Dawrf()
         }
     }
     
@@ -48,9 +52,8 @@ class Character {
 }
 
 class Warrior: TypeChar {
-    init(name: String){
+    init(){
         super.init(
-            name: name,
             life: 100,
             weapon: 10,
             heal: 0
@@ -59,9 +62,8 @@ class Warrior: TypeChar {
 }
 
 class Magnus: TypeChar {
-    init(name: String){
+    init(){
         super.init(
-            name: name,
             life: 200,
             weapon: 1,
             heal: 10
@@ -70,9 +72,8 @@ class Magnus: TypeChar {
 }
 
 class Colossus: TypeChar {
-    init(name: String){
+    init(){
         super.init(
-            name: name,
             life: 200,
             weapon: 2,
             heal: 0
@@ -82,9 +83,8 @@ class Colossus: TypeChar {
 }
 
 class Dawrf: TypeChar {
-    init(name: String){
+    init(){
         super.init(
-            name: name,
             life: 50,
             weapon: 20,
             heal: 0

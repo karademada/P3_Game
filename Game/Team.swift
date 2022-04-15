@@ -14,7 +14,7 @@ class Team {
     var description: String {
         var t:String=""
         for i in teamCharacters {
-            t =  "\(i.currentChar?.name ?? ""), \(i.currentChar?.life ?? 0), \(i.currentChar?.weapon ?? 0), \(i.currentChar?.heal ?? 0)"
+            t =  "\(i.name), \(i.currentChar?.life ?? 0), \(i.currentChar?.weapon ?? 0), \(i.currentChar?.heal ?? 0)"
         }
         return t
     }
@@ -25,9 +25,21 @@ class Team {
     }
     
     func addCharacter(charType: CharacterType, name: String){
-        let newCharacter = Character(type: charType, name: name)
-        teamCharacters.append( newCharacter  )
+        
+        let newCharacter = Character(type: charType, name: name)        
+        teamCharacters.append( newCharacter )
     }
+    
+    func checkInputCharAreValid(charType: CharacterType, name: String)-> Bool {
+        
+        for teamChar in teamCharacters {
+            if teamChar.name == name || teamChar.type == charType {
+                return true
+            }
+        }
+        return false
+    }
+    
     func getCharacter(name: String) -> Character{
         var currentChar: Character?
         for character in teamCharacters where character.name == name {

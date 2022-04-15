@@ -22,7 +22,8 @@ class Player {
     }
     
     
-    func chooseCharacter(name: String) -> Character {
+    
+    func chooseCharacter(type: CharacterType, name: String) -> Character {
         
         return Character(type: .warrior, name: name)
     }
