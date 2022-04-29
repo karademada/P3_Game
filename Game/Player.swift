@@ -21,11 +21,46 @@ class Player {
         self.playerName = playerName
     }
     
-    
-    
-    func chooseCharacter(type: CharacterType, name: String) -> Character {
+    func printTeamMember(team: Team){
         
-        return Character(type: .warrior, name: name)
+        guard let teamName = team.name else {
+            return
+        }
+        print("Team \(teamName) is composed of")
+        team.teamCharacters.enumerated().forEach{(index, Character) in
+            print("\(index). \(Character.name)")
+        }
+    }
+    
+    func chooseCharacterMyTeam()->Character{
+        var myCharPlay: Character?
+        var charFound:Bool = true
+        
+        print("\(self.playerName) team's")
+        let currentTeam = self.team! as Team
+        
+        printTeamMember(team: currentTeam)
+        
+        print("CHOOSE TYPE IN THE LIST")
+        while (charFound){
+            if let choice = readLine() {
+                if let choiceInt = Int(choice),
+                   choiceInt < currentTeam.teamCharacters.count && currentTeam.teamCharacters[choiceInt].currentChar?.life ?? 0 > 0{
+                    myCharPlay = currentTeam.teamCharacters[choiceInt]
+                    charFound = false
+                } else {
+                    print("Value non correct or he is allready DEAD !!!")
+                    
+                }
+                
+            }
+        }
+        
+        guard let myChar = myCharPlay else {
+            return  currentTeam.teamCharacters[0]
+        }
+        return myChar
+        
     }
     
     func attack(name: String) {

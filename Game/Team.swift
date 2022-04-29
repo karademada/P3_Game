@@ -25,17 +25,13 @@ class Team {
     }
     
     func addCharacter(charType: CharacterType, name: String){
-        
         let newCharacter = Character(type: charType, name: name)        
         teamCharacters.append( newCharacter )
     }
     
     func checkInputCharAreValid(charType: CharacterType, name: String)-> Bool {
-        
         for teamChar in teamCharacters {
-            if teamChar.name == name || teamChar.type == charType {
-                return true
-            }
+            return teamChar.name == name || teamChar.type == charType
         }
         return false
     }
@@ -49,5 +45,22 @@ class Team {
         }
         
         return currentChar!
+    }
+    
+
+    func isAllDead()->Bool{
+        var total = 0
+
+        teamCharacters.enumerated().forEach{(index, character) in
+            guard let life = character.currentChar?.life else {
+                return
+            }
+            print("\(index). Player name \(character.name) life : \(life)")
+
+            total += life
+        }
+        print("total  \(total )")
+        print("total > 0 \(total > 0)")
+        return total > 0 
     }
 }

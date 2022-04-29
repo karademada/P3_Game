@@ -8,9 +8,9 @@
 import Foundation
 
 class TypeChar {
-    var life: Int?
-    var weapon: Int?
-    var heal: Int?
+    var life: Int
+    var weapon: Int
+    var heal: Int
     init(life: Int, weapon: Int, heal: Int){
         self.life = life
         self.weapon = weapon

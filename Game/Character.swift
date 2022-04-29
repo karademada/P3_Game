@@ -51,13 +51,16 @@ class Character {
     func heal(){
         
     }
+    /*func getHealth(name: name) -> Int {
+        
+    }*/
 }
 
 class Warrior: TypeChar {
     init(){
         super.init(
             life: 100,
-            weapon: 10,
+            weapon: 100,
             heal: 0
         )
     }
@@ -67,7 +70,7 @@ class Magnus: TypeChar {
     init(){
         super.init(
             life: 200,
-            weapon: 1,
+            weapon: 50,
             heal: 10
         )
     }
@@ -77,7 +80,7 @@ class Colossus: TypeChar {
     init(){
         super.init(
             life: 200,
-            weapon: 2,
+            weapon: 50,
             heal: 0
         )
     }
@@ -88,7 +91,7 @@ class Dawrf: TypeChar {
     init(){
         super.init(
             life: 50,
-            weapon: 20,
+            weapon: 50,
             heal: 0
         )
     }
