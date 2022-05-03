@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 enum CharacterType{
     case warrior
     case magnus
@@ -15,9 +14,7 @@ enum CharacterType{
     case dwarf
 }
 
-
 class Character {
-//    var type: CharacterType
     var name:String
     var currentChar: TypeChar?
     var type: CharacterType
@@ -43,17 +40,6 @@ class Character {
     func setName(name: String){
         self.name = name
     }
-    
-    func attack(){
-        
-    }
-    
-    func heal(){
-        
-    }
-    /*func getHealth(name: name) -> Int {
-        
-    }*/
 }
 
 class Warrior: TypeChar {
@@ -84,7 +70,7 @@ class Colossus: TypeChar {
             heal: 0
         )
     }
-
+    
 }
 
 class Dawrf: TypeChar {
@@ -95,5 +81,5 @@ class Dawrf: TypeChar {
             heal: 0
         )
     }
-
+    
 }

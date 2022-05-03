@@ -23,9 +23,8 @@ class Game {
     var score = Int()
     var players = [Player]()
     var roundCpt = 0
-
-    let labelInfos = ["start":"Game is start", "fight":"Fight is start","over":"Game is over", "team":"Compose team", "player":"Choose player team"]
     
+    let labelInfos = ["start":"Game is start", "fight":"Fight is start","over":"Game is over", "team":"Compose team", "player":"Choose player team"]
     
     init(start: Bool) {
         // Init all players
@@ -40,32 +39,18 @@ class Game {
             print("|ADD \(i) PLAYER\( i > 1 ? "S": "")| -> CHOOSE A NAME")
             if let name = readLine(){
                 self.players.append(Player(playerName: name))
-                print("Player name is \(name)")
+                print("Player name is \(name) \r\n")
                 i -= 1
             }
         }
         
         
-        self.players.forEach { player in
-            print("ENTER A NAME FOR THE TEAM")
-            
-            /*
-             var nameChar:String?
-             while nameChar?.count ?? 0 < 3 {
-                 guard let name = readLine() else {
-                     return ""
-                 }
-                 nameChar = name
-                 if let nameCharB = nameChar,
-                    nameCharB.count < 3 {
-                     print("name must longer than 3 ")
-                 }
-             }
-             */
+        self.players.enumerated().forEach { (index,player) in
+            print("ENTER A NAME FOR THE TEAM \(index) \r\n")
             
             if let teamName = readLine() {
                 player.team = Team(name: teamName)
-                print("A team name \(teamName) is created ")
+                print("A team name \(teamName) was created \r\n")
             }
             guard let _ = player.team else {
                 return
@@ -86,7 +71,7 @@ class Game {
     }
     
     func getName()-> String{
-        print("SET NAME FOR CHARACTER TYPE")
+        print("SET NAME FOR CHARACTER TYPE \r\n")
         
         var nameChar:String?
         while nameChar?.count ?? 0 < 3 {
@@ -160,34 +145,33 @@ class Game {
             currentTeam.teamCharacters.forEach{Character in
                 lists += "\(Character.name) | "
             }
-            print("\(lists) in his team ")
+            print("\(lists) in his team \r\n")
         }
     }
     
     func round(player: Player, enemy: Player){
         var myCharPlay: Character?
         var enemyCharPlay: Character?
-
-        print("Round \(roundCpt)")
+        
         // choose my character
-        print("CHOOSE MY CHARACTER FOR THE GAME")
+        print("CHOOSE YOUR CHARACTER FOR THE GAME")
         
         myCharPlay = player.chooseCharacterMyTeam()
         
         guard let cP = myCharPlay else {
             return
         }
-
+        
         guard let cC = cP.currentChar else {
             return
         }
         
         enemyCharPlay = enemy.chooseCharacterMyTeam()
-
+        
         guard let eP = enemyCharPlay else {
             return
         }
-
+        
         
         listAction(player: player, charPlayer: cP,enemyChar: eP, heal: cC.heal)
         roundCpt+=1
@@ -208,11 +192,9 @@ class Game {
                    charActionInt > 0 || charActionInt < 3 {
                     print(charActionInt)
                     if(charActionInt == 1 ) {
-                        //charPlayer.isHeal = true
                         healPeople(player: player, charPlayer )
                     }
                     else if(charActionInt == 2){
-                        //charPlayer.isAttack = true
                         isAttacking(player: charPlayer, enemy: enemyChar)
                     } else {
                         print("Action Don't exist")
@@ -224,47 +206,42 @@ class Game {
             //charPlayer.isAttack = true
             isAttacking(player: charPlayer, enemy: enemyChar)
         }
-        print("charPlayer isAttack \(charPlayer.isAttack)")
-        print("charPlayer isHeal \(charPlayer.isHeal)")
-
+        
     }
     
     func healPeople(player:Player, _ myCharPlay: Character? ){
-
-            print("choose a character in my team to heal")
-            let homieToHeal: Character  = player.chooseCharacterMyTeam()
-            guard var homieCharLife = homieToHeal.currentChar?.life else {
-                return
-            }
-            
-            guard let myCharHeal = myCharPlay?.currentChar?.heal else {
-                return
-            }
-            print("myCharHeal  before heal : \(myCharHeal)")
-            print("homieCharLife  before heal : \(homieCharLife)")
-
-            homieCharLife += myCharHeal
-            
-            print("homieCharLife after heal : \(homieCharLife)")
-            myCharPlay?.currentChar?.life = homieCharLife
+        
+        print("CHOOSE WHO YOU WANT HEAL")
+        let homieToHeal: Character  = player.chooseCharacterMyTeam()
+        guard var homieCharLife = homieToHeal.currentChar?.life else {
+            return
+        }
+        
+        guard let myCharHeal = myCharPlay?.currentChar?.heal else {
+            return
+        }
+        print("\(homieToHeal.name) before heal : \(myCharHeal)")
+        print("\(homieToHeal.name) life before heal : \(homieCharLife)")
+        
+        homieCharLife += myCharHeal
+        
+        print("\(homieToHeal.name) life after heal : \(homieCharLife)")
+        homieToHeal.currentChar?.life = homieCharLife
     }
     
     func isAttacking(player: Character , enemy: Character){
-            
-            guard var myCharWeapon = player.currentChar?.weapon else {
-                return
-            }
-            print("myCharWeapon \(myCharWeapon)")
         
+        guard let myCharWeapon = player.currentChar?.weapon else {
+            return
+        }
+
+        guard var enemyCharLife = enemy.currentChar?.life else {
+            return
+        }
         
-            guard var enemyCharLife = enemy.currentChar?.life else {
-                return
-            }
-        
-            enemyCharLife -= myCharWeapon
-            print("My enemy live after attack :", enemyCharLife)
-            enemy.currentChar?.life = enemyCharLife
-        
+        enemyCharLife -= myCharWeapon
+        print("My enemy live after attack :", enemyCharLife)
+        enemy.currentChar?.life = enemyCharLife
     }
     func checkAllDead()->Bool{
         guard let isdeadOne = players[0].team?.isAllDead() else {
@@ -281,28 +258,32 @@ class Game {
     func startFigth(){
         print(labelInfos["fight"]!)
         
-        while(checkAllDead()){
-        
-            print("is game ----------")
+        while(!checkAllDead()){
             
             if(roundCpt.isMultiple(of: 2)){
-                print("\(roundCpt)--------Player \(players[0].playerName)")
+                print("Round \(roundCpt) Current Player is \(players[0].playerName) \r\n")
                 round(player: players[0],enemy: players[1])
             }  else {
-                print("\(roundCpt)--------Player \(players[1].playerName)")
+                print("Round \(roundCpt) Current Player is \(players[1].playerName) \r\n")
                 round(player: players[1], enemy:players[0])
             }
         }
+        
+        print("Round \(roundCpt) \r\n")
+        players.forEach { player in
+            player.printStats()
+            guard let life = player.team?.teamTotalLife else {
+                return
+            }
+            print("Team life's \(life)")
+
+            if(life <= 0){
+                print(" \(player.playerName) is Loose \r\n")
+            }else {
+                print(" \(player.playerName) is the Winner \r\n")
+            }
+        }
         print(labelInfos["over"])
-    }
-    
-    
-    func displayInfo(message: String){
-        print(message)
-    }
-    
-    func getPlayer(index: Int) -> Player {
-        return players[index]
     }
 }
 

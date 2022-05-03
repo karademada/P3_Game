@@ -10,6 +10,7 @@ import Foundation
 
 class Team {
     var name: String?
+    var teamTotalLife = 0
     var teamCharacters: [Character] = []
     var description: String {
         var t:String=""
@@ -25,7 +26,7 @@ class Team {
     }
     
     func addCharacter(charType: CharacterType, name: String){
-        let newCharacter = Character(type: charType, name: name)        
+        let newCharacter = Character(type: charType, name: name)
         teamCharacters.append( newCharacter )
     }
     
@@ -43,24 +44,23 @@ class Team {
                 currentChar = character
             }
         }
-        
         return currentChar!
     }
     
-
+    
     func isAllDead()->Bool{
         var total = 0
-
+        
         teamCharacters.enumerated().forEach{(index, character) in
             guard let life = character.currentChar?.life else {
                 return
             }
             print("\(index). Player name \(character.name) life : \(life)")
-
+            
             total += life
         }
-        print("total  \(total )")
-        print("total > 0 \(total > 0)")
-        return total > 0 
+        print("Team total life  \(total ) \r\n")
+        teamTotalLife = total
+        return total <= 0
     }
 }

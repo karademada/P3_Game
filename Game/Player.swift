@@ -28,7 +28,30 @@ class Player {
         }
         print("Team \(teamName) is composed of")
         team.teamCharacters.enumerated().forEach{(index, Character) in
-            print("\(index). \(Character.name)")
+            guard let chLife = Character.currentChar?.life else {
+                return
+            }
+            
+            guard let chWeapon = Character.currentChar?.weapon else {
+                return
+            }
+            
+            print("\(index). \(Character.name)  life : \(chLife) weapon : \(chWeapon) ")
+        }
+    }
+    
+    func printStats(){
+        let currentTeam = self.team! as Team
+        
+        guard let teamName = currentTeam.name else {
+            return
+        }
+        print("Team \(teamName) is composed of")
+        currentTeam.teamCharacters.enumerated().forEach{(index, Character) in
+            guard let chLife = Character.currentChar?.life else {
+                return
+            }
+            print("\(index). name \(Character.name)  life : \(chLife) ")
         }
     }
     
@@ -50,24 +73,15 @@ class Player {
                     charFound = false
                 } else {
                     print("Value non correct or he is allready DEAD !!!")
-                    
                 }
-                
             }
         }
         
         guard let myChar = myCharPlay else {
             return  currentTeam.teamCharacters[0]
         }
+        print("YOU CHOOSE \(myChar.name)")
         return myChar
-        
     }
     
-    func attack(name: String) {
-        
-    }
-    
-    func heal(name: String) {
-        
-    }
 }
