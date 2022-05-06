@@ -149,26 +149,38 @@ class Game {
         
         myCharPlay = player.chooseCharacterMyTeam()
         
-        guard let cP = myCharPlay else {
+        guard let characterPlayer = myCharPlay else {
             return
         }
         
-        guard let cC = cP.currentChar else {
+        guard let characterCurrent = characterPlayer.currentChar else {
             return
         }
         
-        enemyCharPlay = enemy.chooseCharacterMyTeam()
-        
-        guard let eP = enemyCharPlay else {
+        guard let characterHeal = characterPlayer.currentChar?.heal else {
             return
         }
         
+        if(characterPlayer.isHeal ){
+            listAction(player: player, charPlayer: characterPlayer,enemyChar: nil, heal: characterCurrent.heal)
+        } else {
+            enemyCharPlay = enemy.chooseCharacterMyTeam()
+            
+            guard let enemyPlay = enemyCharPlay else {
+                return
+            }
+            listAction(player: player, charPlayer: characterPlayer,enemyChar: enemyPlay, heal: characterCurrent.heal)
+
+        }
         
-        listAction(player: player, charPlayer: cP,enemyChar: eP, heal: cC.heal)
+        
+        
+        
+        
         roundCount+=1
     }
     
-    func listAction(player:Player, charPlayer: Character, enemyChar:Character, heal: Int){
+    func listAction(player:Player, charPlayer: Character, enemyChar:Character?, heal: Int){
         
         if heal == 10 {
             print("name : \(charPlayer.name) type : \(charPlayer.type) can Heal")
@@ -186,7 +198,10 @@ class Game {
                         healPeople(player: player, charPlayer )
                     }
                     else if(charActionInt == 2){
-                        isAttacking(player: charPlayer, enemy: enemyChar)
+                        guard let enemyCharExist = enemyChar else {
+                            return
+                        }
+                        isAttacking(player: charPlayer, enemy: enemyCharExist)
                     } else {
                         print("Action Don't exist")
                     }
@@ -195,7 +210,10 @@ class Game {
         } else {
             print("name : \(charPlayer.name) type : \(charPlayer.type) can't Heal, SO attack!")
             //charPlayer.isAttack = true
-            isAttacking(player: charPlayer, enemy: enemyChar)
+            guard let enemyCharExist = enemyChar else {
+                return
+            }
+            isAttacking(player: charPlayer, enemy: enemyCharExist)
         }
         
     }

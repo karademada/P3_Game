@@ -40,7 +40,7 @@ class Player {
                 guard let chHeal = Character.currentChar?.heal else {
                     return
                 }
-                print("\(index). \(Character.name)  life : \(chLife) heal : \(chHeal) ")
+                print("\(index). \(Character.name)  life : \(chLife) weapon : \(chWeapon) heal : \(chHeal) ")
 
             }else{
                 print("\(index). \(Character.name)  life : \(chLife) weapon : \(chWeapon) ")
