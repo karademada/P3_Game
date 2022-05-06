@@ -35,8 +35,17 @@ class Player {
             guard let chWeapon = Character.currentChar?.weapon else {
                 return
             }
-            
-            print("\(index). \(Character.name)  life : \(chLife) weapon : \(chWeapon) ")
+           
+            if(Character.type == .magnus){
+                guard let chHeal = Character.currentChar?.heal else {
+                    return
+                }
+                print("\(index). \(Character.name)  life : \(chLife) heal : \(chHeal) ")
+
+            }else{
+                print("\(index). \(Character.name)  life : \(chLife) weapon : \(chWeapon) ")
+
+            }
         }
     }
     
