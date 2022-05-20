@@ -131,7 +131,6 @@ class Game {
             return
         }
         
-        
         if(characterPlayer.isHeal  ){
             listAction(player: player, charPlayer: characterPlayer,enemyChar: nil, heal: characterCurrent.heal)
         } else {
@@ -160,16 +159,15 @@ class Game {
             if let charAction = readLine(){
                 if let charActionInt = Int(charAction),
                    charActionInt > 0 || charActionInt < 3 {
-                    print(charActionInt)
-                    if(charActionInt == 1 ) {
-                        charPlayer.healPeople(player: player )
-                    }
-                    else if(charActionInt == 2){
+                    
+                    switch charActionInt {
+                    case 1:  charPlayer.healPeople(player: player )
+                    case 2:
                         guard let enemyCharExist = enemyChar else {
                             return
                         }
                         enemyCharExist.isAttacking(player: charPlayer)
-                    } else {
+                    default:
                         print("Action Don't exist")
                     }
                 }

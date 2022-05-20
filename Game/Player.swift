@@ -9,7 +9,7 @@ import Foundation
 
 class Player {
     var team: Team?
-    var playerName: String
+    let playerName: String
     var description: String {
         guard let team = team?.description else {
             return "team is Null"
@@ -21,36 +21,41 @@ class Player {
         self.playerName = playerName
     }
     
-    func printTeamMember(team: Team){
+    func printTeamMember(){
         
+        guard let team = self.team else {
+            return
+        }
         guard let teamName = team.name else {
             return
         }
         print("Team \(teamName) is composed of")
-        team.teamCharacters.enumerated().forEach{(index, Character) in
-            guard let chLife = Character.currentChar?.life else {
+        team.teamCharacters.enumerated().forEach{(index, character) in
+            guard let chLife = character.currentChar?.life else {
                 return
             }
             
-            guard let chWeapon = Character.currentChar?.weapon else {
+            guard let chWeapon = character.currentChar?.weapon else {
                 return
             }
            
-            if(Character.type == .magnus){
-                guard let chHeal = Character.currentChar?.heal else {
+            if(character.type == .magnus){
+                guard let chHeal = character.currentChar?.heal else {
                     return
                 }
-                print("\(index). \(Character.name)  life : \(chLife) weapon : \(chWeapon) heal : \(chHeal) ")
+                print("\(index). \(character.name)  life : \(chLife) weapon : \(chWeapon) heal : \(chHeal) ")
 
             }else{
-                print("\(index). \(Character.name)  life : \(chLife) weapon : \(chWeapon) ")
+                print("\(index). \(character.name)  life : \(chLife) weapon : \(chWeapon) ")
 
             }
         }
     }
     
     func printStats(){
-        let currentTeam = self.team! as Team
+        guard let currentTeam = self.team else {
+            return
+        }
         
         guard let teamName = currentTeam.name else {
             return
@@ -69,15 +74,15 @@ class Player {
         var charFound:Bool = true
         
         print("\(self.playerName) team's is on the battlefield")
-        let currentTeam = self.team! as Team
+        let currentTeam = self.team!
         
-        printTeamMember(team: currentTeam)
+        printTeamMember()
         
         print("CHOOSE TYPE IN THE LIST")
         while (charFound){
             if let choice = readLine() {
                 if let choiceInt = Int(choice),
-                   choiceInt < currentTeam.teamCharacters.count || currentTeam.teamCharacters[choiceInt].currentChar?.life ?? 0 > 0{
+                   choiceInt < currentTeam.teamCharacters.count && currentTeam.teamCharacters[choiceInt].currentChar?.life ?? 0 > 0{
                     myCharPlay = currentTeam.teamCharacters[choiceInt]
                     charFound = false
                 } else {

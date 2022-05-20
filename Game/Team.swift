@@ -37,8 +37,6 @@ class Team {
             print("Character name allready in the list")
         }
         
-        
-        
         print("listNames after add \(Game.listNames)")
     }
     
@@ -63,6 +61,15 @@ class Team {
         return currentChar!
     }
     
+    func printLife(){
+        teamCharacters.enumerated().forEach{(index, character) in
+            guard let life = character.currentChar?.life else {
+                return
+            }
+            print("\(index). Player name \(character.name) life : \(life)")
+            
+        }
+    }
     
     func isAllDead()->Bool{
         var total = 0
