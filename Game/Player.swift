@@ -68,7 +68,7 @@ class Player {
         var myCharPlay: Character?
         var charFound:Bool = true
         
-        print("\(self.playerName) team's")
+        print("\(self.playerName) team's is on the battlefield")
         let currentTeam = self.team! as Team
         
         printTeamMember(team: currentTeam)
@@ -77,7 +77,7 @@ class Player {
         while (charFound){
             if let choice = readLine() {
                 if let choiceInt = Int(choice),
-                   choiceInt < currentTeam.teamCharacters.count && currentTeam.teamCharacters[choiceInt].currentChar?.life ?? 0 > 0{
+                   choiceInt < currentTeam.teamCharacters.count || currentTeam.teamCharacters[choiceInt].currentChar?.life ?? 0 > 0{
                     myCharPlay = currentTeam.teamCharacters[choiceInt]
                     charFound = false
                 } else {

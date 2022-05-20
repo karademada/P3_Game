@@ -6,27 +6,30 @@
 //
 
 import Foundation
+import Chalk // @mxcl ~> 0.3
 
 class Game {
+    static let numberMaxOfCharacter: Int = 3
+    static  var listNames = [String]()
     var players = [Player]()
     var roundCount = 0
     
-    let labelInfos = ["start":"Game is start", "fight":"Fight is start","over":"Game is over", "team":"Compose team", "player":"Choose player team"]
+    let labelInfos = ["start":"## Game is start ##", "fight":"## Fight is start ##","over":"## Game is over ##", "team":"## Compose team ##", "player":"## Choose player team ##"]
     
-    init(start: Bool) {
+    init() {
+        print(labelInfos["start"]!)
+
         // Init all players
         // ask to create a team and then choose 3 characters
         // display informations
         // start game
+        print(labelInfos["team"]!)
         
-        var nbrCharacter = 2
-        
-        while nbrCharacter > 0 {
+        for nbrCharacter in (1...2).reversed(){
             print("|ADD \(nbrCharacter) PLAYER\( nbrCharacter > 1 ? "S": "")| -> CHOOSE A NAME")
             if let name = readLine(){
                 self.players.append(Player(playerName: name))
                 print("Player name is \(name) \r\n")
-                nbrCharacter -= 1
             }
         }
         
@@ -41,80 +44,51 @@ class Game {
             guard let _ = player.team else {
                 return
             }
-            chooseType(player: player)
+            chooseCharacterToPlay(player: player)
         }
-        playerTeamCharacters()
+        printCharactersInTeam()
     }
     
-    func addCharacterIfNotExist(choice: Int, name: String, currentTeam: Team)-> Bool {
-        switch choice {
-        case 1: return  currentTeam.checkInputCharAreValid(charType: CharacterType.warrior, name: name)
-        case 2: return currentTeam.checkInputCharAreValid(charType: CharacterType.magnus, name: name)
-        case 3: return currentTeam.checkInputCharAreValid(charType: CharacterType.colossus, name: name)
-        case 4: return currentTeam.checkInputCharAreValid(charType: CharacterType.dwarf, name: name)
-        default: return false
-        }
-    }
     
-    func getName()-> String{
-        print("SET NAME FOR CHARACTER TYPE \r\n")
+    func chooseCharacterToPlay(player: Player){
         
-        var nameChar:String?
-        while nameChar?.count ?? 0 < 3 {
-            guard let name = readLine() else {
-                return ""
-            }
-            nameChar = name
-            if let nameCharB = nameChar,
-               nameCharB.count < 3 {
-                print("name must longer than 3 ")
-            }
-        }
-        guard let nameCh = nameChar else {
-            return ""
-        }
-        return nameCh
-    }
-    
-    func chooseType(player: Player){
         for _ in 1..<4 {
-            var currentTeam: Team
-            guard  let curTeam: Team = player.team else {
+            guard  let currentTeam: Team = player.team else {
                 return
             }
-            currentTeam = curTeam as Team
             
-            while currentTeam.teamCharacters.count < 3 {
-                let count = 3 - currentTeam.teamCharacters.count
+            while currentTeam.teamCharacters.count < Game.numberMaxOfCharacter {
+                let count = Game.numberMaxOfCharacter - currentTeam.teamCharacters.count
                 print("""
                 CHOOSE \(count) CHARACTERS FOR PLAYER \(player.playerName)
                 1. warrior life: 100, weapon: 100, heal: 0
                 2. magnus life: 200, weapon: 50, heal: 10
                 3. colossus life: 200, weapon: 50, heal: 0
-                4. dwarf life: 50, weapon: 50, heal: 0
                 """)
                 
                 print("CHOOSE TYPE IN THE LIST")
                 
                 if let choice = readLine(){
                     if let choiceInt = Int(choice),
-                       choiceInt > 0 || choiceInt < 5{
-                        
-                        let nameChar = getName()
-                        
-                        let isExist = addCharacterIfNotExist(choice: choiceInt, name: nameChar, currentTeam: currentTeam)
-                        
-                        if(isExist){
-                            print("Character name and type allready in the list")
-                        } else {
-                            switch choiceInt {
-                            case 1:  currentTeam.addCharacter(charType: CharacterType.warrior, name: nameChar)
-                            case 2: currentTeam.addCharacter(charType: CharacterType.magnus, name: nameChar)
-                            case 3: currentTeam.addCharacter(charType: CharacterType.colossus, name: nameChar)
-                            case 4: currentTeam.addCharacter(charType: CharacterType.dwarf, name: nameChar)
-                            default:
-                                print("Character not exist")
+                       choiceInt > 0 || choiceInt < 4{
+                        let nameChar = Character.getNameInput()
+
+                        if(currentTeam.teamCharacters.count > 0){
+                                                        
+                            if(Team.checkInputCharAreValid(name: nameChar)){
+                                print("Character name allready in the list")
+                            } else {
+                                switch choiceInt {
+                                case 1:  currentTeam.addCharacter(charType: CharacterType.warrior, name: nameChar)
+                                case 2: currentTeam.addCharacter(charType: CharacterType.magnus, name: nameChar)
+                                case 3: currentTeam.addCharacter(charType: CharacterType.colossus, name: nameChar)
+                                default:
+                                    print("Character not exist")
+                                }
                             }
+                        } else {
+                            // Firstime add a Character
+                            currentTeam.addCharacter(charType: CharacterType.warrior, name: nameChar)
                         }
                     } else {
                         print("Choose an Integer in the range 1 to 4 ")
@@ -124,7 +98,7 @@ class Game {
         }
     }
     
-    func playerTeamCharacters(){
+    func printCharactersInTeam(){
         players.forEach{player in
             print("Player \(player.playerName) is got ")
             var currentTeam: Team
@@ -157,11 +131,8 @@ class Game {
             return
         }
         
-        guard let characterHeal = characterPlayer.currentChar?.heal else {
-            return
-        }
         
-        if(characterPlayer.isHeal ){
+        if(characterPlayer.isHeal  ){
             listAction(player: player, charPlayer: characterPlayer,enemyChar: nil, heal: characterCurrent.heal)
         } else {
             enemyCharPlay = enemy.chooseCharacterMyTeam()
@@ -170,12 +141,8 @@ class Game {
                 return
             }
             listAction(player: player, charPlayer: characterPlayer,enemyChar: enemyPlay, heal: characterCurrent.heal)
-
+            
         }
-        
-        
-        
-        
         
         roundCount+=1
     }
@@ -195,13 +162,13 @@ class Game {
                    charActionInt > 0 || charActionInt < 3 {
                     print(charActionInt)
                     if(charActionInt == 1 ) {
-                        healPeople(player: player, charPlayer )
+                        charPlayer.healPeople(player: player )
                     }
                     else if(charActionInt == 2){
                         guard let enemyCharExist = enemyChar else {
                             return
                         }
-                        isAttacking(player: charPlayer, enemy: enemyCharExist)
+                        enemyCharExist.isAttacking(player: charPlayer)
                     } else {
                         print("Action Don't exist")
                     }
@@ -213,45 +180,12 @@ class Game {
             guard let enemyCharExist = enemyChar else {
                 return
             }
-            isAttacking(player: charPlayer, enemy: enemyCharExist)
+            enemyCharExist.isAttacking(player: charPlayer)
         }
         
     }
     
-    func healPeople(player:Player, _ myCharPlay: Character? ){
-        
-        print("CHOOSE WHO YOU WANT HEAL")
-        let homieToHeal: Character  = player.chooseCharacterMyTeam()
-        guard var homieCharLife = homieToHeal.currentChar?.life else {
-            return
-        }
-        
-        guard let myCharHeal = myCharPlay?.currentChar?.heal else {
-            return
-        }
-        print("\(homieToHeal.name) before heal : \(myCharHeal)")
-        print("\(homieToHeal.name) life before heal : \(homieCharLife)")
-        
-        homieCharLife += myCharHeal
-        
-        print("\(homieToHeal.name) life after heal : \(homieCharLife)")
-        homieToHeal.currentChar?.life = homieCharLife
-    }
     
-    func isAttacking(player: Character , enemy: Character){
-        
-        guard let myCharWeapon = player.currentChar?.weapon else {
-            return
-        }
-        
-        guard var enemyCharLife = enemy.currentChar?.life else {
-            return
-        }
-        
-        enemyCharLife -= myCharWeapon
-        print("My enemy live after attack :", enemyCharLife)
-        enemy.currentChar?.life = enemyCharLife
-    }
     func checkAllDead()->Bool{
         guard let isdeadOne = players[0].team?.isAllDead() else {
             return false

@@ -12,6 +12,8 @@ class Team {
     var name: String?
     var teamTotalLife = 0
     var teamCharacters: [Character] = []
+    
+    
     var description: String {
         var t:String=""
         for i in teamCharacters {
@@ -26,14 +28,28 @@ class Team {
     }
     
     func addCharacter(charType: CharacterType, name: String){
-        let newCharacter = Character(type: charType, name: name)
-        teamCharacters.append( newCharacter )
+        print("listNames before add \(Game.listNames)")
+        if(!Team.checkInputCharAreValid(name: name)){
+            let newCharacter = Character(type: charType, name: name)
+            teamCharacters.append( newCharacter )
+            Game.listNames.append(name)
+        } else {
+            print("Character name allready in the list")
+        }
+        
+        
+        
+        print("listNames after add \(Game.listNames)")
     }
     
-    func checkInputCharAreValid(charType: CharacterType, name: String)-> Bool {
-        for teamChar in teamCharacters {
-            return teamChar.name == name || teamChar.type == charType
+    static func checkInputCharAreValid(name: String)-> Bool {
+        for nameChar in Game.listNames {
+            print("nameChar : \(nameChar)")
+            if(nameChar == name){
+                return true
+            }
         }
+        
         return false
     }
     
@@ -63,4 +79,5 @@ class Team {
         teamTotalLife = total
         return total <= 0
     }
+    
 }

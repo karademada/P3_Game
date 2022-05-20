@@ -19,6 +19,6 @@ extension Array where Element == Player {
 
 
 
-var myGame = Game(start: true)
+var myGame = Game()
 myGame.startFigth()
 
